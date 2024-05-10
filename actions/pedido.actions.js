@@ -37,10 +37,27 @@ async function deletePedidoMongo(id) {
     return pedido._id;
 }
 
+async function getComprador(id){
+    const pedido = await Pedido.findById(id);
+    return pedido.usuarioComprador;
+}
+
+async function getVendedor(id){
+    const pedido = await Pedido.findById(id);
+    return pedido.usuarioVendedor;
+}
+
+async function getLibros(id){
+    const pedido = await Pedido.findById(id);
+    return pedido.libros;
+}
 module.exports = {
     createPedidoMongo,
     getPedidosMongo,
     getPedidoMongo,
     updatePedidoMongo,
-    deletePedidoMongo
+    deletePedidoMongo,
+    getComprador,
+    getVendedor,
+    getLibros,
 };

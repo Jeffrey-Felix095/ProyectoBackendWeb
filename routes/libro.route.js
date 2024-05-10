@@ -6,7 +6,6 @@ const { validarToken } = require("../middlewares/autenticacion.middleware");
 
 async function GetAllLibros(req, res) {
     try {
-        console.log("Si entro aquí");
         const resultadosBusqueda = await readAllLibrosFiltrados(req.query);
 
         res.status(200).json({
@@ -32,8 +31,9 @@ async function GetLibros(req, res) {
 
 async function GetLibro(req, res) {
     try {
-        const resultadosBusqueda = await readLibro(req.params);
-        console.log(resultadosBusqueda);
+        // llamada a controlador con los filtros
+        const resultadosBusqueda = await readLibrosFiltrados(req.query);
+
         res.status(200).json({
             ...resultadosBusqueda
         })
@@ -45,8 +45,10 @@ async function GetLibro(req, res) {
 // de aqui para abajo requiere de autenticacion
 async function PostLibro(req, res) {
     try {
-        // llamada a controlador con los datos
-        await createLibro(req.body);
+        const usuarioId = req.usuarioId;
+        console.log(usuarioId);
+        const filtros = { ...req.body, propietario: usuarioId };
+        await createLibro(filtros);
 
         res.status(200).json({
             mensaje: " Libro creado con exito. 👍"
@@ -56,11 +58,26 @@ async function PostLibro(req, res) {
     }
 }
 
+async function GetMyBooks(req, res) {
+    try {
+        // El ID del usuario se puede acceder desde req.usuarioId después de pasar por el middleware
+        const usuarioId = req.usuarioId;
 
+        const filtros = { ...req.query, propietario: usuarioId };
+        console.log(usuarioId);
+        const resultadosBusqueda = await readLibrosFiltrados(filtros);
+
+        res.status(200).json({
+            ...resultadosBusqueda
+        })
+    } catch (e) {
+        res.status(500).json({ msg: "" })
+    }
+}
 async function PatchLibros(req, res) {
     try {
         // llamada a controlador con los datos
-        
+
         updateLibro(req.body);
 
         res.status(200).json({
@@ -86,11 +103,12 @@ async function DeleteLibros(req, res) {
 }
 
 
-router.get("/", GetLibros);
+router.get("/", validarToken, GetMyBooks);
 router.get("/All/", GetAllLibros);
-router.get("/:_id", GetLibro);
-router.post("/", PostLibro);
-router.patch("/:_id", PatchLibros);
-router.delete("/:_id", DeleteLibros);
+router.get("/:_id", validarToken, GetLibro);
+router.get("/misLibros", validarToken, GetMyBooks);
+router.post("/", validarToken, PostLibro);
+router.patch("/:_id", validarToken, PatchLibros);
+router.delete("/:_id", validarToken, DeleteLibros);
 
 module.exports = router;

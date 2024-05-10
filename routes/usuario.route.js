@@ -17,13 +17,12 @@ async function GetUsuario(req, res) {
         res.status(500).json({ msg: "" })
     }
 }
-//6633b7597019e3630c7072a9
+
 //Se usa solo para las busquedas
 async function GetUsuarios(req, res) {
     try {
         // llamada a controlador con los filtros
         const resultadosBusqueda = await readUsuariosFiltrados(req.query);
-        console.log(resultadosBusqueda);
         res.status(200).json({
             ...resultadosBusqueda
         })
@@ -76,8 +75,8 @@ async function DeleteUsuarios(req, res) {
 router.get("/", GetUsuarios);
 router.get("/:_id", GetUsuario);
 router.post("/", PostUsuario);
-router.patch("/:id", PatchUsuarios);
-router.delete("/:id", DeleteUsuarios);
+router.patch("/:id",validarToken, PatchUsuarios);
+router.delete("/:id",validarToken, DeleteUsuarios);
 
 
 module.exports = router;

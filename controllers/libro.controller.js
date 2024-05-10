@@ -1,4 +1,4 @@
-const { createLibroMongo, getLibroMongo, getLibrosMongo, deleteLibroMongo, updateLibroMongo } = require("../actions/libro.actions");
+const { createLibroMongo, getLibroMongo, getLibrosMongo, deleteLibroMongo, updateLibroMongo, getPropietario } = require("../actions/libro.actions");
 const { addLibro } = require("../actions/usuarios.actions");
 
 async function createLibro(datos) {
@@ -74,5 +74,6 @@ module.exports = {
     createLibro,
     updateLibro,
     deleteLibro,
-    readAllLibrosFiltrados
+    readAllLibrosFiltrados,
+    getPropietario
 };

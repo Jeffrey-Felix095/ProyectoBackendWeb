@@ -9,7 +9,6 @@ const schemaUsuario = new mongoose.Schema({
   libros: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Libro', // Referencia al modelo de Libro.
-    required: true
   }],
   borrado: { type: Boolean, default: false}
 }, {

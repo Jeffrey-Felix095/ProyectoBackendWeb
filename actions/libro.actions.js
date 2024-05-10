@@ -38,10 +38,17 @@ async function deleteLibroMongo(id) {
     return libro._id;
 }
 
+async function getPropietario(id){
+    const libro = await Libro.findById(id);
+    return libro.propietario;
+}
+
+
 module.exports = {
     createLibroMongo,
     getLibroMongo,
     getLibrosMongo,
     updateLibroMongo,
-    deleteLibroMongo
+    deleteLibroMongo, 
+    getPropietario
 };

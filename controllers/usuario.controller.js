@@ -63,6 +63,7 @@ async function deleteUsuario(id) {
     }
 }
 
+
 module.exports = {
     readUsuariosFiltrados,
     readAllUsuariosFiltrados,
