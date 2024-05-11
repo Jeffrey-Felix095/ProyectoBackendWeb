@@ -11,27 +11,33 @@ async function GetAllPedidos(req, res) {
             ...resultadosBusqueda
         })
     } catch (e) {
-        res.status(500).json({ msg: "Error al obtener pedidos" })
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al obtener pedidos` ,
+            err: err.msg,
+        })
     }
 }
 
 async function GetPedidos(req, res) {
     try {
         const usuarioId = req.usuarioId;
-        console.log(usuarioId);
         const filtros = {
             ...req.query, $or: [
                 { usuarioComprador: usuarioId },
                 { usuarioVendedor: usuarioId }
             ]
         };
-        console.log(usuarioId);
         const resultadosBusqueda = await readPedidos(filtros);
         res.status(200).json({
             ...resultadosBusqueda
         })
     } catch (e) {
-        res.status(500).json({ msg: "Error al obtener pedidos" })
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al obtener pedidos solicitados`,
+            err: err.msg,
+        })
     }
 }
 
@@ -42,7 +48,11 @@ async function GetPedido(req, res) {
             ...resultadosBusqueda
         })
     } catch (e) {
-        res.status(500).json({ msg: `Error al obtener pedido: ${req.params._id}` })
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al obtener pedido: ${req.params._id}`,
+            err: err.msg,
+        })
     }
 }
 
@@ -56,7 +66,11 @@ async function PostPedido(req, res) {
             mensaje: "El pedido se creo con exito. 👍"
         })
     } catch (e) {
-        respondWithError(res, e);
+        
+        const mensajeError = e.message;
+        res.status(500).json({
+            mensaje: `${mensajeError}`,
+        });
     }
 }
 
@@ -70,7 +84,11 @@ async function PatchPedido(req, res) {
             mensaje: "El pedido fue actualizado con exito. 👍"
         })
     } catch (e) {
-        respondWithError(res, e);
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al actualizar el pedido`,
+            err: err.msg,
+        })
     }
 }
 
@@ -78,22 +96,26 @@ async function PatchPedido(req, res) {
 async function DeletePedido(req, res) {
     try {
         // llamada a controlador con los datos
-        deletePedido(req.params.id);
+        await deletePedido(req.params.id);
 
         res.status(200).json({
             mensaje: "El pedido fue eliminado con exito. 👍"
         })
     } catch (e) {
-        respondWithError(res, e);
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al eliminar el pedido`,
+            err: err.msg,
+        })
     }
 }
 
-router.get("/", validarToken, GetPedidos);
 router.get("/All/", GetAllPedidos);
-router.get("/", validarToken, GetPedido);
-router.post("/", validarToken, PostPedido);
-router.patch("/:_id", validarToken, PatchPedido);
-router.delete("/:_id", validarToken, DeletePedido);
+router.get("/misPedidos/:_id", validarToken, GetPedido);
+router.get("/misPedidos/", validarToken, GetPedidos);
+router.post("/crearPedido/", validarToken, PostPedido);
+router.patch("/actualizarPedido/:_id", validarToken, PatchPedido);
+router.delete("/borrarPedido/:_id", validarToken, DeletePedido);
 
 
 module.exports = router;

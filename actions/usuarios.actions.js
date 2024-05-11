@@ -6,8 +6,6 @@ async function getUsuariosMongo(filtros) {
     const usuariosFiltrados = await Usuario.find(filtros);
     return {
         resultados: usuariosFiltrados,
-        // paginaMax: cantidadUsuarios / 20,
-        // paginaActual: 1,
         cantidadUsuarios: cantidadUsuarios
     };
 }
@@ -18,10 +16,8 @@ async function getUsuarioMongo(filtros) {
 }
 
 async function createUsuarioMongo(datos) {
-    datos.password = await argon2.hash(datos.password, {type: argon2.argon2id});
-    console.log(datos.password)
+    datos.password = await argon2.hash(datos.password, { type: argon2.argon2id });
     const UsuarioCreado = await Usuario.create(datos);
-
     return UsuarioCreado;
 }
 
@@ -39,7 +35,6 @@ async function deleteUsuarioMongo(id) {
 
 async function addLibro(idUsuario, idLibro) {
     try {
-        // Buscar el usuario por su ID
         const usuario = await Usuario.findById(idUsuario);
         if (!usuario) {
             throw new Error('Usuario no encontrado');

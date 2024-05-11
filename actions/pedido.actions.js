@@ -6,8 +6,6 @@ async function getPedidosMongo(filtros) {
 
     return {
         resultados: pedidosFiltrados,
-        // paginaMax: cantidadPedidos / 20,
-        // paginaActual: 1,
         cantidadPedidos: cantidadPedidos
     };
 }

@@ -12,8 +12,12 @@ async function AutenticarUsuario(req, res) {
             idUsuario: tokenAndUser.usuario._id,
             mensaje: "Exito. 👍"
         })
-    } catch(e) {
-        res.status(500).json({msg: ""})
+    } catch (e) {
+        const mensajeError = e.message;
+        res.status(500).json({
+            mensaje: `Error en la autenticación: ${mensajeError}`,
+        });
+
     }
 }
 

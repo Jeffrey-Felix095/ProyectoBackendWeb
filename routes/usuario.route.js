@@ -41,7 +41,11 @@ async function PostUsuario(req, res) {
             mensaje: "Usuario creado con exito. 👍"
         })
     } catch (e) {
-        respondWithError(res, e);
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al crear usuario` ,
+            err: err.msg,
+        })
     }
 }
 
@@ -49,13 +53,17 @@ async function PostUsuario(req, res) {
 async function PatchUsuarios(req, res) {
     try {
         // llamada a controlador con los datos
-        updateUsuario(req.body);
+        console.log(await updateUsuario(req.body));
 
         res.status(200).json({
             mensaje: "Usuario modificado con exito. 👍"
         })
     } catch (e) {
-        respondWithError(res, e);
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al modificar usuario` ,
+            err: err.msg,
+        })
     }
 }
 
@@ -63,20 +71,24 @@ async function PatchUsuarios(req, res) {
 async function DeleteUsuarios(req, res) {
     try {
         // llamada a controlador con los datos
-        deleteUsuario(req.params.id);
+        await deleteUsuario(req.params.id);
 
         res.status(200).json({
             mensaje: "Usuario borrado con exito. 👍"
         })
     } catch (e) {
-        respondWithError(res, e);
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al borrar usuario`,
+            err: err.msg,
+        })
     }
 }
-router.get("/", GetUsuarios);
-router.get("/:_id", GetUsuario);
+//router.get("/", GetUsuarios);
+//router.get("/:_id", GetUsuario);
 router.post("/", PostUsuario);
-router.patch("/:id",validarToken, PatchUsuarios);
-router.delete("/:id",validarToken, DeleteUsuarios);
+router.patch("/:id", validarToken, PatchUsuarios);
+router.delete("/:id", validarToken, DeleteUsuarios);
 
 
 module.exports = router;

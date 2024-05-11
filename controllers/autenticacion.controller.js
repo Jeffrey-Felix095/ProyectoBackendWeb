@@ -5,10 +5,9 @@ async function loginUsuario(datos) {
     try {
         const usuario = await login(datos);
         const token = await generarToken(usuario);
-        return {token,usuario};
-    } catch (error) {
-        console.error('Error al autenticar el ususario:', error);
-        throw new Error('Error al autenticar el ususario');
+        return { token, usuario };
+    } catch (e) {
+        throw e;
     }
 }
 

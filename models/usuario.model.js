@@ -4,7 +4,7 @@ const schemaUsuario = new mongoose.Schema({
   cc: { type: Number, required: true },
   nombres: { type: String, required: true },
   apellidos: { type: String, required: true },
-  correo: { type: String, required: true },
+  correo: { type: String, required: true, unique:[true, "Este correo ya esta en uso"]  },
   password: { type: String, required: true },
   libros: [{
     type: mongoose.Schema.Types.ObjectId,

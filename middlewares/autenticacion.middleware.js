@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 
 async function validarToken(req, res, next) {
     const accesToken = req.headers['authorization'];
-    console.log(req.headers['authorization']);
     if (!accesToken) {
         return res.send("No se suministro ningún token de acceso autorizado");
     }

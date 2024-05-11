@@ -7,9 +7,8 @@ async function createLibro(datos) {
         // id usuario, id libro
         await addLibro(libroCreado.toObject().propietario, libroCreado.toObject()._id);
         return libroCreado.toObject();
-    } catch (error) {
-        console.error('Error al crear libro:', error);
-        throw new Error('Error al crear libro');
+    } catch (e) {
+        throw e;
     }
 }
 
@@ -17,10 +16,9 @@ async function readLibro(query) {
     try {
         const filtros = { ...query, borrado: false };
         const Libro = await getLibroMongo(filtros);
-        return Libro != null ? Libro.toObject(): null;
-    } catch (error) {
-        console.error('Error al obtener libro:', error);
-        throw new Error('Error al obtener libros');
+        return Libro != null ? Libro.toObject() : null;
+    } catch (e) {
+        throw e;
     }
 }
 
@@ -29,9 +27,8 @@ async function readLibrosFiltrados(query) {
         const filtros = { ...query, borrado: false };
         const resultadosLibrosFiltrados = await getLibrosMongo(filtros);
         return resultadosLibrosFiltrados;
-    } catch (error) {
-        console.error('Error al obtener libros filtrados:', error);
-        throw new Error('Error al obtener libros filtrados');
+    } catch (e) {
+        throw e;
     }
 }
 
@@ -39,9 +36,8 @@ async function readAllLibrosFiltrados(query) {
     try {
         const resultadosLibrosFiltrados = await getLibrosMongo(query);
         return resultadosLibrosFiltrados;
-    } catch (error) {
-        console.error('Error al obtener libros filtrados:', error);
-        throw new Error('Error al obtener libros filtrados');
+    } catch (e) {
+        throw e;
     }
 }
 
@@ -52,9 +48,8 @@ async function updateLibro(datos) {
         const { _id, ...cambios } = datos;
         const libroActualizado = await updateLibroMongo(_id, cambios);
         return libroActualizado;
-    } catch (error) {
-        console.error('Error al actualizar libro:', error);
-        throw new Error('Error al actualizar libro');
+    } catch (e) {
+        throw e;
     }
 }
 
@@ -62,9 +57,8 @@ async function deleteLibro(id) {
     try {
         const libroEliminado = await deleteLibroMongo(id);
         return libroEliminado;
-    } catch (error) {
-        console.error('Error al eliminar libro:', error);
-        throw new Error('Error al eliminar libro');
+    } catch (e) {
+        throw e;
     }
 }
 

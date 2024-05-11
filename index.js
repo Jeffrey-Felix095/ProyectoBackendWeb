@@ -24,7 +24,6 @@ const rutasAuth = require("./routes/autenticacion.route")
 app.use('/auth', rutasAuth);
 
 
-// aqui va la connection string VVVVV
-//process.env.SECRET
+
 mongoose.connect(`mongodb+srv://${process.env.USERMONGO}:${process.env.PASSWORDMONGO}@cluster0.nd8lg0z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
 app.listen(8080);

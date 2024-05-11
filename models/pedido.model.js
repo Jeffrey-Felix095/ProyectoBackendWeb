@@ -27,12 +27,15 @@ const pedidoSchema = new mongoose.Schema({
     fechaPedido: {
         type: Date,
         default: Date.now
+    }, total: {
+        type: Number,
+        required: true
     },
-    borrado: {type: Boolean, default: false}
-},{
+    borrado: { type: Boolean, default: false }
+}, {
     versionKey: false,
     timestamps: true
-  });
+});
 
 // Crear el modelo de Pedido a partir del esquema
 const Pedido = mongoose.model('Pedido', pedidoSchema);

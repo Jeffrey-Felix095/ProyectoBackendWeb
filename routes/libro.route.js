@@ -12,7 +12,11 @@ async function GetAllLibros(req, res) {
             ...resultadosBusqueda
         })
     } catch (e) {
-        res.status(500).json({ msg: "" })
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al obtener todos los libros: ${req.params._id}`,
+            err: err.msg,
+        })
     }
 }
 
@@ -25,20 +29,28 @@ async function GetLibros(req, res) {
             ...resultadosBusqueda
         })
     } catch (e) {
-        res.status(500).json({ msg: "" })
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al obtener libros solicitados}`,
+            err: err.msg,
+        })
     }
 }
 
 async function GetLibro(req, res) {
     try {
         // llamada a controlador con los filtros
-        const resultadosBusqueda = await readLibrosFiltrados(req.query);
+        const resultadosBusqueda = await readLibro(req.params);
 
         res.status(200).json({
             ...resultadosBusqueda
         })
     } catch (e) {
-        res.status(500).json({ msg: "" })
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al obtener el libro solicitado`,
+            err: err.msg,
+        })
     }
 }
 
@@ -46,7 +58,6 @@ async function GetLibro(req, res) {
 async function PostLibro(req, res) {
     try {
         const usuarioId = req.usuarioId;
-        console.log(usuarioId);
         const filtros = { ...req.body, propietario: usuarioId };
         await createLibro(filtros);
 
@@ -54,7 +65,11 @@ async function PostLibro(req, res) {
             mensaje: " Libro creado con exito. 👍"
         })
     } catch (e) {
-        respondWithError(res, e);
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al crear el libro`,
+            err: err.msg,
+        })
     }
 }
 
@@ -64,27 +79,34 @@ async function GetMyBooks(req, res) {
         const usuarioId = req.usuarioId;
 
         const filtros = { ...req.query, propietario: usuarioId };
-        console.log(usuarioId);
         const resultadosBusqueda = await readLibrosFiltrados(filtros);
 
         res.status(200).json({
             ...resultadosBusqueda
         })
     } catch (e) {
-        res.status(500).json({ msg: "" })
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al obtener los libros del usuario`,
+            err: err.msg,
+        })
     }
 }
 async function PatchLibros(req, res) {
     try {
         // llamada a controlador con los datos
 
-        updateLibro(req.body);
+        await updateLibro(req.body);
 
         res.status(200).json({
             mensaje: "Libro modificado con exito. 👍"
         })
     } catch (e) {
-        respondWithError(res, e);
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al modificar el libro especificado`,
+            err: err.msg,
+        })
     }
 }
 
@@ -92,23 +114,26 @@ async function PatchLibros(req, res) {
 async function DeleteLibros(req, res) {
     try {
         // llamada a controlador con los datos
-        deleteLibro(req.params._id);
+        await deleteLibro(req.params._id);
 
         res.status(200).json({
             mensaje: "Libro borrado con exito. 👍"
         })
     } catch (e) {
-        respondWithError(res, e);
+        const err = JSON.parse(e.message);
+        res.status(err.code).json({
+            mensaje: `Error al borrar el libro`,
+            err: err.msg,
+        })
     }
 }
 
-
-router.get("/", validarToken, GetMyBooks);
+router.get("/", GetLibros);
 router.get("/All/", GetAllLibros);
-router.get("/:_id", validarToken, GetLibro);
-router.get("/misLibros", validarToken, GetMyBooks);
-router.post("/", validarToken, PostLibro);
-router.patch("/:_id", validarToken, PatchLibros);
-router.delete("/:_id", validarToken, DeleteLibros);
+router.get("/misLibros/:_id", validarToken, GetLibro);
+router.get("/misLibros/", validarToken, GetMyBooks);
+router.post("/crearLibro/", validarToken, PostLibro);
+router.patch("/actualizarLibro/:_id", validarToken, PatchLibros);
+router.delete("/eliminarLibro/:_id", validarToken, DeleteLibros);
 
 module.exports = router;
